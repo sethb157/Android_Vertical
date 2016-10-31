@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Vertical Prototype</string>
+    <string name="rain">Rain</string>
+    <string name="sunny">SUNNY</string>
 </resources>
