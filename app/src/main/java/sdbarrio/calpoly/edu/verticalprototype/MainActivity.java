@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         String type = "library";
         switch (view.getId()) {
             case R.id.rain_button:
+                //type = "movie_theater";
                 type = "cafe";
                 break;
             case R.id.sunny_button:
@@ -136,6 +137,36 @@ public class MainActivity extends AppCompatActivity implements GoogleApiClient.C
         });
     }
 
+
+    public void getWeather(View view) {
+        String city = "sanluisobispo";
+        String query = "select%20*%20from%20weather.forecast%20where%20woeid%20in%20(select%20woeid%20from%20geo.places(1)%20where%20text%3D%22"+ city +"%22)&format=json";
+
+        OkHttpClient okClient = new OkHttpClient();
+        Request request = new Request.Builder().url("https://query.yahooapis.com/v1/public/yql?q=" + query).build();
+
+        final TextView weatherText = (TextView) findViewById(R.id.weather_text);
+
+        // Make request and handle response
+        okClient.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                Log.d("MAIN_ACTIVITY", "FAILED");
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+
+                final String responseText = response.body().string();
+                MainActivity.this.runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        weatherText.setText(responseText, TextView.BufferType.EDITABLE);
+                    }
+                });
+            }
+        });
+    }
 
 
     @Override
